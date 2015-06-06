@@ -14,28 +14,26 @@ describe 'filling line', ->
       editor.selectAll();
       editor.backspace();
 
+  text = (actual) ->
+    editor.setText actual
+    editor.moveToBottom()
+    editor.moveToEndOfLine()
+
+    return fill: (expected) ->
+      atom.commands.dispatch(workspaceView, 'fill-line')
+      expect(editor.getText()).toBe expected
+
   it 'empty editor should do nothing', ->
-    editor.setText ''
-    atom.commands.dispatch(workspaceView, 'fill-line')
-    expect(editor.getText()).toBe ''
+    text('').fill('')
 
   it 'one line editor should do nothing', ->
-    editor.setText 'WorkspaceView'
-    editor.moveToBottom()
-    editor.moveToEndOfLine()
-    atom.commands.dispatch(workspaceView, 'fill-line')
-    expect(editor.getText()).toBe 'WorkspaceView'
+    text('WorkspaceView').fill 'WorkspaceView'
+
+  it 'empty line above should do nothing', ->
+    text('\nWorkspaceView').fill '\nWorkspaceView'
 
   it 'should duplicate character to length of line above', ->
-    editor.setText 'WorkspaceView\n+'
-    editor.moveToBottom()
-    editor.moveToEndOfLine()
-    atom.commands.dispatch(workspaceView, 'fill-line')
-    expect(editor.getText()).toBe 'WorkspaceView\n+++++++++++++'
+    text('WorkspaceView\n+').fill 'WorkspaceView\n+++++++++++++'
 
   it 'should duplicate string to length of line above', ->
-    editor.setText 'WorkspaceView\n+-~'
-    editor.moveToBottom()
-    editor.moveToEndOfLine()
-    atom.commands.dispatch(workspaceView, 'fill-line')
-    expect(editor.getText()).toBe 'WorkspaceView\n+-~+-~+-~+-~+'
+    text('WorkspaceView\n+-~').fill 'WorkspaceView\n+-~+-~+-~+-~+'
