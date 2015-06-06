@@ -1,7 +1,7 @@
 {
   "name": "fill-line",
   "main": "./lib/fill-line",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "fill a line to match the line above",
   "keywords": [],
   "repository": "https://github.com/giladgray/atom-fill-line",
